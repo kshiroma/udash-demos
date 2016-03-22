@@ -27,7 +27,7 @@ object Init extends JSApp with StrictLogging {
   override def main(): Unit = {
     jQ(document).ready((_: Element) => {
       val appRoot = jQ(".todoapp").get(0)
-      if (appRoot.isEmpty) logger.error("Application root element not found! Check you index.html file!")
+      if (appRoot.isEmpty) logger.error("Application root element not found! Check your index.html file!")
       else applicationInstance.run(appRoot.get)
     })
   }
