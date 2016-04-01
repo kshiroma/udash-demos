@@ -1,6 +1,8 @@
 package io.udash.todo.rpc
 
+import io.udash.i18n._
 import io.udash.rpc._
+import io.udash.todo.i18n.TodosTranslationTemplates
 import io.udash.todo.rpc.model.Todo
 import io.udash.todo.services.TodoStorage
 
@@ -18,6 +20,9 @@ class ExposedRpcInterfaces(todoStorage: TodoStorage)(implicit clientId: ClientId
   override def load(): Future[Seq[Todo]] = Future {
     todoStorage.load()
   }
+
+  override def i18n: RemoteTranslationRPC =
+    new TranslationRPCEndpoint(TodosTranslationTemplates.provider)
 }
 
        

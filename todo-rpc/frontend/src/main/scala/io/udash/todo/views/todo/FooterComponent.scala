@@ -1,6 +1,8 @@
 package io.udash.todo.views.todo
 
 import io.udash._
+import io.udash.i18n._
+import io.udash.todo.i18n.Translations
 import io.udash.todo.{Context, TodoActiveState, TodoAllState, TodoCompletedState}
 import io.udash.wrappers.jquery._
 import org.scalajs.dom.ext.KeyCode
@@ -21,8 +23,12 @@ object FooterComponent {
     )(
       produce(todoList.filter(ActiveFilter.matcher))(todos => {
         val size: Int = todos.size
-        val pluralization = if (size == 1) "item" else "items"
-        span(cls := "todo-count")(s"$size $pluralization left").render
+        span(cls := "todo-count")(
+          translated((size match {
+            case 1 => Translations.todos.footer.itemLeft
+            case _ => Translations.todos.footer.itemsLeft
+          })(size))
+        ).render
       }),
       ul(cls := "filters")(
         li(
@@ -31,7 +37,7 @@ object FooterComponent {
             bindAttribute(filter)((v: TodoListFilter, el: Element) =>
               updateLinkState(el, AllFilter, v)
             )
-          )("All")
+          )(translated(Translations.todos.footer.all()))
         ),
         li(
           a(
@@ -39,7 +45,7 @@ object FooterComponent {
             bindAttribute(filter)((v: TodoListFilter, el: Element) =>
               updateLinkState(el, ActiveFilter, v)
             )
-          )("Active")
+          )(translated(Translations.todos.footer.active()))
         ),
         li(
           a(
@@ -47,14 +53,14 @@ object FooterComponent {
             bindAttribute(filter)((v: TodoListFilter, el: Element) =>
               updateLinkState(el, CompletedFilter, v)
             )
-          )("Completed")
+          )(translated(Translations.todos.footer.completed()))
         )
       ),
       button(
         cls := "clear-completed",
         showIfListIsNotEmpty(todoList.filter(CompletedFilter.matcher)),
         onclick :+= ((ev: Event) => { clearCallback(); true })
-      )("Clear completed")
+      )(translated(Translations.todos.footer.clear()))
     )
 
   private def updateLinkState(el: Element, expectedFilter: TodoListFilter, activeFilter: TodoListFilter): Unit =
