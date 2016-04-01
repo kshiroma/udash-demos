@@ -1,6 +1,8 @@
 package io.udash.todo.views.todo
 
 import io.udash._
+import io.udash.i18n._
+import io.udash.todo.i18n.Translations
 import io.udash.todo.{Context, TodoActiveState, TodoAllState, TodoCompletedState}
 import io.udash.wrappers.jquery._
 import org.scalajs.dom.ext.KeyCode
@@ -21,8 +23,12 @@ object FooterComponent {
     )(
       produce(todoList.filter(ActiveFilter.matcher))(todos => {
         val size: Int = todos.size
-        val pluralization = if (size == 1) "item" else "items"
-        span(cls := "todo-count")(s"$size $pluralization left").render
+        span(cls := "todo-count")(
+          translatedDynamic(size match {
+            case 1 => Translations.todos.footer.itemLeft
+            case _ => Translations.todos.footer.itemsLeft
+          })((key) => key(size))
+        ).render
       }),
       ul(cls := "filters")(
         li(
@@ -31,7 +37,11 @@ object FooterComponent {
             bindAttribute(filter)((v: TodoListFilter, el: Element) =>
               updateLinkState(el, AllFilter, v)
             )
-          )("All")
+          )(
+            translatedDynamic(Translations.todos.footer.all)(
+              (key) => key()
+            )
+          )
         ),
         li(
           a(
@@ -39,7 +49,11 @@ object FooterComponent {
             bindAttribute(filter)((v: TodoListFilter, el: Element) =>
               updateLinkState(el, ActiveFilter, v)
             )
-          )("Active")
+          )(
+            translatedDynamic(Translations.todos.footer.active)(
+              (key) => key()
+            )
+          )
         ),
         li(
           a(
@@ -47,14 +61,22 @@ object FooterComponent {
             bindAttribute(filter)((v: TodoListFilter, el: Element) =>
               updateLinkState(el, CompletedFilter, v)
             )
-          )("Completed")
+          )(
+            translatedDynamic(Translations.todos.footer.completed)(
+              (key) => key()
+            )
+          )
         )
       ),
       button(
         cls := "clear-completed",
         showIfListIsNotEmpty(todoList.filter(CompletedFilter.matcher)),
         onclick :+= ((ev: Event) => { clearCallback(); true })
-      )("Clear completed")
+      )(
+        translatedDynamic(Translations.todos.footer.clear)(
+          (key) => key()
+        )
+      )
     )
 
   private def updateLinkState(el: Element, expectedFilter: TodoListFilter, activeFilter: TodoListFilter): Unit =
