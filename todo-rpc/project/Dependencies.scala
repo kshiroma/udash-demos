@@ -4,7 +4,7 @@ import sbt._
 object Dependencies extends Build {
   val udashCoreVersion = "0.1.0"
   val udashRPCVersion = "0.1.0"
-  val udashI18NVersion = "0.1.0-SNAPSHOT"
+  val udashI18NVersion = "0.1.0"
 
   val logbackVersion = "1.1.3"
   val jettyVersion = "9.3.7.v20160115"
