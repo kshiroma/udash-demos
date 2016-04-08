@@ -8,4 +8,4 @@ Demo based on [TodoMVC](http://todomvc.com/). This is frontend-only project.
 
 ## Todo RPC
 
-Demo based on [TodoMVC](http://todomvc.com/) with server-side storage using the Udash RPC system. 
+Demo based on [TodoMVC](http://todomvc.com/) with server-side storage using the Udash RPC system.  
