@@ -1,7 +1,7 @@
 name := "todo-rpc"
 
-version in ThisBuild := "0.1.0-SNAPSHOT"
-scalaVersion in ThisBuild := "2.11.7"
+version in ThisBuild := "0.2.0-SNAPSHOT"
+scalaVersion in ThisBuild := "2.11.8"
 organization in ThisBuild := "io.udash"
 crossPaths in ThisBuild := false
 scalacOptions in ThisBuild ++= Seq(
@@ -61,7 +61,6 @@ lazy val frontend = project.in(file("frontend")).enablePlugins(ScalaJSPlugin)
   .settings(
     libraryDependencies ++= frontendDeps.value,
     crossLibs(Compile),
-    jsDependencies ++= frontendJSDeps.value,
     persistLauncher in Compile := true,
 
     compile <<= (compile in Compile),
