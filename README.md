@@ -4,8 +4,13 @@ Collection of demo applications based on Udash.
 
 ## Todo
 
-Demo based on [TodoMVC](http://todomvc.com/). This is frontend-only project.
+A demo based on [TodoMVC](http://todomvc.com/). This is frontend-only project.
 
 ## Todo RPC
 
-Demo based on [TodoMVC](http://todomvc.com/) with server-side storage using the Udash RPC system.  
+A demo based on [TodoMVC](http://todomvc.com/) with server-side storage using the Udash RPC system.  
+
+## Udash REST with Bootstrap Components
+
+A demo presenting usage of the Udash REST module. It serves REST API with Spray.io in the backend application and uses it through type safe Udash REST interface in the frontend.
+This demo uses the Udash Bootstrap Components library. 
