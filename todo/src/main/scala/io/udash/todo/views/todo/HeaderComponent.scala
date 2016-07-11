@@ -10,7 +10,7 @@ import scalatags.JsDom.all._
 object HeaderComponent {
   def apply(name: Property[String], addCallback: (Property[String]) => Any): JsDom.TypedTag[html.Element] =
     header(cls := "header")(
-      TextInput(name)(
+      TextInput.debounced(name)(
         cls := "new-todo",
         placeholder :=  "What needs to be done?",
         autofocus :=  true,

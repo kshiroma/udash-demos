@@ -40,7 +40,7 @@ object TodoElementComponent {
           onclick :+= ((ev: Event) => { deleteItem(); true })
         )
       ),
-      TextInput(item.subProp(_.editName))(
+      TextInput.debounced(item.subProp(_.editName))(
         cls := "edit",
         onkeydown :+= ((ev: KeyboardEvent) => {
           if (ev.keyCode == KeyCode.Enter) {
