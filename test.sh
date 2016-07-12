@@ -10,6 +10,7 @@ for subproject in `ls */build.sbt`; do
     echo -e "Test \e[32msucceed\e[39m!"
   else
     echo -e "Test \e[31mfailed\e[39m!"
+    cat compilation.log
     ((ERRORS++))
   fi
   cd ..

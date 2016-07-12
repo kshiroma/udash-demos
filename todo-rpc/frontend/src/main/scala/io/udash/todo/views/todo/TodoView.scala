@@ -3,7 +3,7 @@ package io.udash.todo.views.todo
 import io.udash._
 import io.udash.todo._
 import io.udash.todo.storage.RemoteTodoStorage
-import io.udash.utils.Logger
+import io.udash.utils.StrictLogging
 import io.udash.wrappers.jquery._
 import org.scalajs.dom.Element
 
@@ -19,7 +19,7 @@ object TodoViewPresenter extends ViewPresenter[TodoState] {
   }
 }
 
-class TodoPresenter(model: ModelProperty[TodoViewModel]) extends Presenter[TodoState] {
+class TodoPresenter(model: ModelProperty[TodoViewModel]) extends Presenter[TodoState] with StrictLogging {
   import Context._
   import io.udash.todo.rpc.model.{Todo => STodo}
 
@@ -44,7 +44,7 @@ class TodoPresenter(model: ModelProperty[TodoViewModel]) extends Presenter[TodoS
         RemoteTodoStorage.store(v.map(todo => STodo(todo.name, todo.completed)))
       )
     case Failure(ex) =>
-      Logger.error("Can not load todos from server!")
+      logger.error("Can not load todos from server!")
   }
 
   RemoteTodoStorage.listen((todos: Seq[STodo]) => {
