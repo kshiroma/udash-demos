@@ -1,6 +1,6 @@
 name := "todomvc"
 
-version in ThisBuild := "0.2.0-SNAPSHOT"
+version in ThisBuild := "0.3.0-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.8"
 organization in ThisBuild := "io.udash"
 crossPaths in ThisBuild := false
