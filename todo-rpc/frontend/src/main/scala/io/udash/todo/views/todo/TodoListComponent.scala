@@ -13,7 +13,7 @@ object TodoListComponent {
   import Context._
 
   // TODO: Udash should provide type alias CastableSeqProperty[A] = io.udash.properties.SeqProperty[A, _ <: CastableProperty[A]]
-  type CastableSeqProperty[A] = io.udash.properties.SeqProperty[A, _ <: CastableProperty[A]]
+  type CastableSeqProperty[A] = io.udash.properties.seq.SeqProperty[A, _ <: CastableProperty[A]]
 
   def apply(todoList: CastableSeqProperty[TodoElement],
             filter: ReadableProperty[TodoListFilter],

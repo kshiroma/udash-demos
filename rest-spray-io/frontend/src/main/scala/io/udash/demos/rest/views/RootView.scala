@@ -15,7 +15,7 @@ class RootView extends View {
   import io.udash.demos.rest.Context._
   import scalatags.JsDom.all._
 
-  private var child: Element = div().render
+  private val child: Element = div().render
 
   private val content = div(
     UdashBootstrap.loadBootstrapStyles(),
@@ -31,12 +31,10 @@ class RootView extends View {
     )
   ).render
 
-  override def getTemplate: Element = content
+  override def getTemplate: Modifier = content
 
   override def renderChild(view: View): Unit = {
     import io.udash.wrappers.jquery._
-    val newChild = view.getTemplate
-    jQ(child).replaceWith(newChild)
-    child = newChild
+    view.getTemplate.applyTo(child)
   }
 }

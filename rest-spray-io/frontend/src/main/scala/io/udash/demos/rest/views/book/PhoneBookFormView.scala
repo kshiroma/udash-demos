@@ -78,7 +78,7 @@ class PhoneBookFormView(model: ModelProperty[PhoneBookEditorModel], presenter: P
     }
   ).render
 
-  override def getTemplate: Element = content
+  override def getTemplate: Modifier = content
 
   override def renderChild(view: View): Unit = {}
 }

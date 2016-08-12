@@ -6,7 +6,7 @@ import org.scalajs.dom.raw.Element
 
 import scalatags.JsDom.all._
 import io.udash.demos.rest.Context._
-import io.udash.properties.SeqProperty
+import io.udash.properties.seq.SeqProperty
 
 object Header {
   private val brand = a(href := IndexState.url)(
