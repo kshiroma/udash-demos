@@ -1,12 +1,10 @@
 package io.udash.demos.files.jetty
 
+import io.udash.rpc._
 import java.io.{File, InputStream}
 import java.nio.file.Files
 import java.util.UUID
 import javax.servlet.MultipartConfigElement
-import javax.servlet.annotation.MultipartConfig
-
-import io.udash.demos.files.utils.FileUploadServlet
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.gzip.GzipHandler
 import org.eclipse.jetty.server.session.SessionHandler
