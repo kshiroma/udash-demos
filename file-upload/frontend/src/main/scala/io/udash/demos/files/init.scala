@@ -1,6 +1,7 @@
 package io.udash.demos.files
 
 import io.udash._
+import io.udash.demos.files.rpc.{MainClientRPC, MainServerRPC, RPCService}
 import io.udash.wrappers.jquery._
 import org.scalajs.dom.{Element, document}
 
@@ -13,6 +14,13 @@ object Context {
   private val viewPresenterRegistry = new StatesToViewPresenterDef
 
   implicit val applicationInstance = new Application[RoutingState](routingRegistry, viewPresenterRegistry, RootState)
+
+  import io.udash.rpc._
+  val serverRpc = DefaultServerRPC[MainClientRPC, MainServerRPC](new RPCService)
+
+  serverRpc.loadUploadedFiles() onSuccess {
+    case result => println(result)
+  }
 }
 
 object Init extends JSApp with StrictLogging {

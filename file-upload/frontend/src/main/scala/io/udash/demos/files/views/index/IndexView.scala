@@ -2,15 +2,12 @@ package io.udash.demos.files.views.index
 
 import io.udash._
 import io.udash.bootstrap.UdashBootstrap
-import io.udash.bootstrap.UdashBootstrap.ComponentId
 import io.udash.bootstrap.button.UdashButton
 import io.udash.bootstrap.form.UdashForm
 import io.udash.bootstrap.label.UdashLabel
 import io.udash.bootstrap.panel.UdashPanel
 import io.udash.bootstrap.progressbar.UdashProgressBar
-import io.udash.properties.seq.SeqProperty
-import org.scalajs.dom.html.Input
-import org.scalajs.dom.{Element, Event, File}
+import org.scalajs.dom.File
 
 class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter) extends FinalView {
   import io.udash.demos.files.Context._
