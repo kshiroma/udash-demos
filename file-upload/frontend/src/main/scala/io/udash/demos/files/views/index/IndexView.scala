@@ -27,10 +27,13 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
   }
 
   override def getTemplate: Modifier = {
-    val uploader = new FileUploader(Url("upload/"))
 
     val fileInput = FileInput("files", acceptMultipleFiles = Property(true), selectedFiles = model.subSeq(_.selectedFiles))()
     val sendButton = UdashButton(block = true)("Send")
+    model.subProp(_.state.state).listen {
+      case FileUploadState.InProgress => sendButton.disabled.set(true)
+      case _ => sendButton.disabled.set(false)
+    }
 
     val progressBar = UdashProgressBar.animated()()
     val progress = model.subProp(_.state.bytesSent).combine(model.subProp(_.state.bytesTotal))((sent, total) => {
@@ -39,8 +42,9 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
     })
     progress.listen(progressBar.progress.set)
 
-    sendButton.listen { case _ =>
-      uploader.upload("files", model.subSeq(_.selectedFiles).get).listen(model.subProp(_.state).set)
+    sendButton.listen {
+      case UdashButton.ButtonClickEvent(_) =>
+        presenter.uploadSelectedFiles()
     }
 
     div(
