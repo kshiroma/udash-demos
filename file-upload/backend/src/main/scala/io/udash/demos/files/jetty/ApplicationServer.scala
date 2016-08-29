@@ -1,20 +1,25 @@
 package io.udash.demos.files.jetty
 
-import io.udash.rpc._
+import scala.concurrent.ExecutionContext.Implicits.global
+
 import java.io.{File, InputStream}
+import java.net.URLDecoder
 import java.nio.file.Files
 import java.util.UUID
 import javax.servlet.MultipartConfigElement
+import javax.servlet.http.HttpServletRequest
 
-import io.udash.demos.files.UploadedFile
-import io.udash.demos.files.rpc.{MainRpcEndpoint, MainServerRPC}
+import io.udash.demos.files.rpc.{ClientRPC, MainRpcEndpoint, MainServerRPC}
 import io.udash.demos.files.services.FilesStorage
+import io.udash.demos.files.{ApplicationServerContexts, UploadedFile}
+import io.udash.rpc._
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.gzip.GzipHandler
 import org.eclipse.jetty.server.session.SessionHandler
 import org.eclipse.jetty.servlet.{DefaultServlet, ServletContextHandler, ServletHolder}
 
 class ApplicationServer(val port: Int, resourceBase: String) {
+
   private val server = new Server(port)
   private val contextHandler = new ServletContextHandler
 
@@ -39,11 +44,17 @@ class ApplicationServer(val port: Int, resourceBase: String) {
     holder.getRegistration.setMultipartConfig(new MultipartConfigElement(""))
     holder
   }
-  contextHandler.addServlet(uploadsHolder, "/upload/*")
+  contextHandler.addServlet(uploadsHolder, ApplicationServerContexts.uploadContextPrefix + "/*")
+
+  private val downloadsHolder = {
+    val holder = new ServletHolder(new DemoFileDownloadServlet(resourceBase + "/uploads", ApplicationServerContexts.downloadContextPrefix))
+    holder.getRegistration.setMultipartConfig(new MultipartConfigElement(""))
+    holder
+  }
+  contextHandler.addServlet(downloadsHolder, ApplicationServerContexts.downloadContextPrefix + "/*")
 
   private val atmosphereHolder = {
     import io.udash.rpc._
-    import scala.concurrent.ExecutionContext.Implicits.global
 
     val config = new DefaultAtmosphereServiceConfig[MainServerRPC]((_) =>
       new DefaultExposesServerRPC[MainServerRPC](new MainRpcEndpoint)
@@ -56,7 +67,7 @@ class ApplicationServer(val port: Int, resourceBase: String) {
     atmosphereHolder.setAsyncSupported(true)
     atmosphereHolder
   }
-  contextHandler.addServlet(atmosphereHolder, "/atm/*")
+  contextHandler.addServlet(atmosphereHolder, ApplicationServerContexts.atmosphereContextPrefix + "/*")
 }
 
 class DemoFileUploadServlet(uploadDir: String) extends FileUploadServlet(Set("file", "files")) {
@@ -69,7 +80,22 @@ class DemoFileUploadServlet(uploadDir: String) extends FileUploadServlet(Set("fi
     FilesStorage.add(
       UploadedFile(name, targetName, targetFile.length())
     )
+
+    // Notify clients
+    ClientRPC(AllClients).fileStorageUpdated()
   }
 }
 
+class DemoFileDownloadServlet(filesDir: String, contextPrefix: String) extends FileDownloadServlet {
+  override protected def resolveFile(request: HttpServletRequest): File = {
+    val name = URLDecoder.decode(request.getRequestURI.stripPrefix(contextPrefix + "/"), "UTF-8")
+    new File(filesDir + File.separator + name)
+  }
+
+  override protected def presentedFileName(name: String): String =
+    FilesStorage.allFiles
+      .find(_.serverFileName == name)
+      .map(_.name)
+      .getOrElse(name)
+}
        

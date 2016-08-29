@@ -7,6 +7,8 @@ import io.udash.bootstrap.form.UdashForm
 import io.udash.bootstrap.label.UdashLabel
 import io.udash.bootstrap.panel.UdashPanel
 import io.udash.bootstrap.progressbar.UdashProgressBar
+import io.udash.bootstrap.table.UdashTable
+import io.udash.demos.files.ApplicationServerContexts
 import org.scalajs.dom.File
 
 class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter) extends FinalView {
@@ -80,6 +82,23 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
             progressBar.render
           ))
         )
+      ).render,
+      h3("You can download uploaded files..."),
+      UdashTable(
+        bordered = Property(true), hover = Property(true)
+      )(model.subSeq(_.uploadedFiles))(
+        headerFactory = Some(() => tr(th("File name"), th("Size")).render),
+        rowFactory = (file) => {
+          val fileModel = file.asModel
+          tr(
+            td(produce(fileModel)(f =>
+              a(href := ApplicationServerContexts.downloadContextPrefix + "/" + f.serverFileName)(f.name).render
+            )),
+            td(produce(fileModel.subProp(_.size))(s =>
+              i(normalizeSize(s)).render
+            ))
+          ).render
+        }
       ).render
     )
   }

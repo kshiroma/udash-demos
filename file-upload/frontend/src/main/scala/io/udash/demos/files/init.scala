@@ -16,11 +16,9 @@ object Context {
   implicit val applicationInstance = new Application[RoutingState](routingRegistry, viewPresenterRegistry, RootState)
 
   import io.udash.rpc._
-  val serverRpc = DefaultServerRPC[MainClientRPC, MainServerRPC](new RPCService)
 
-  serverRpc.loadUploadedFiles() onSuccess {
-    case result => println(result)
-  }
+  val rpcService: RPCService = new RPCService
+  val serverRpc = DefaultServerRPC[MainClientRPC, MainServerRPC](rpcService)
 }
 
 object Init extends JSApp with StrictLogging {
