@@ -1,16 +1,10 @@
-# Udash REST with Bootstrap Components Example
+# Udash Files Upload Example
 
-The Udash REST module provides tools for wrapping REST APIs in type safe interfaces. It includes:
+The Udash framework provides utilities useful for web applications with file upload/download features:
 
-* REST interface description based on Scala traits and annotations
-* mapping Scala methods to REST calls
-* versions for both JVM and JS code
-
-The Udash Bootstrap Components module provides type-safe wrapper for Twitter Bootstrap components. It includes:
-
-* type-safe API for Twitter Bootstrap components 
-* components designed to be used with the Udash Properties system 
-* support of Glyphicons & FontAwesome
+* `FileInput` object in `core` - creates a file input with binded `Property`
+* `FileUploader` class in `core` - uploads files to the server and provides information about the progress via returned `Property`
+* `FileDownloadServlet` and `FileUploadServlet` in `rpc` - servlet templates for uploading and downloading files
 
 ## Learning Scala
 

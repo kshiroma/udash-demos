@@ -2,6 +2,10 @@
 
 Collection of demo applications based on Udash.
 
+## Udash Files Upload
+
+A demo presenting usage of the Udash file upload/download utilities. It also uses the Udash Bootstrap and RPC modules. 
+
 ## Todo
 
 A demo based on [TodoMVC](http://todomvc.com/). This is frontend-only project.
