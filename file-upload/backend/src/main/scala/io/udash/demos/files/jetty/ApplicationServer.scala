@@ -1,18 +1,10 @@
 package io.udash.demos.files.jetty
 
 import scala.concurrent.ExecutionContext.Implicits.global
-
-import java.io.{File, InputStream}
-import java.net.URLDecoder
-import java.nio.file.Files
-import java.util.UUID
 import javax.servlet.MultipartConfigElement
-import javax.servlet.http.HttpServletRequest
 
-import io.udash.demos.files.rpc.{ClientRPC, MainRpcEndpoint, MainServerRPC}
-import io.udash.demos.files.services.FilesStorage
-import io.udash.demos.files.{ApplicationServerContexts, UploadedFile}
-import io.udash.rpc._
+import io.udash.demos.files.ApplicationServerContexts
+import io.udash.demos.files.rpc.{MainRpcEndpoint, MainServerRPC}
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.server.handler.gzip.GzipHandler
 import org.eclipse.jetty.server.session.SessionHandler
@@ -68,34 +60,5 @@ class ApplicationServer(val port: Int, resourceBase: String) {
     atmosphereHolder
   }
   contextHandler.addServlet(atmosphereHolder, ApplicationServerContexts.atmosphereContextPrefix + "/*")
-}
-
-class DemoFileUploadServlet(uploadDir: String) extends FileUploadServlet(Set("file", "files")) {
-  new File(uploadDir).mkdir()
-
-  override protected def handleFile(name: String, content: InputStream): Unit = {
-    val targetName: String = s"${UUID.randomUUID()}_$name"
-    val targetFile = new File(uploadDir, targetName)
-    Files.copy(content, targetFile.toPath)
-    FilesStorage.add(
-      UploadedFile(name, targetName, targetFile.length())
-    )
-
-    // Notify clients
-    ClientRPC(AllClients).fileStorageUpdated()
-  }
-}
-
-class DemoFileDownloadServlet(filesDir: String, contextPrefix: String) extends FileDownloadServlet {
-  override protected def resolveFile(request: HttpServletRequest): File = {
-    val name = URLDecoder.decode(request.getRequestURI.stripPrefix(contextPrefix + "/"), "UTF-8")
-    new File(filesDir + File.separator + name)
-  }
-
-  override protected def presentedFileName(name: String): String =
-    FilesStorage.allFiles
-      .find(_.serverFileName == name)
-      .map(_.name)
-      .getOrElse(name)
 }
        

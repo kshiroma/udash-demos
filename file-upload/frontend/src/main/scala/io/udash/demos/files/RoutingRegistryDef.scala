@@ -1,6 +1,7 @@
 package io.udash.demos.files
 
 import io.udash._
+import io.udash.utils.Bidirectional
 
 class RoutingRegistryDef extends RoutingRegistry[RoutingState] {
   def matchUrl(url: Url): RoutingState =
@@ -9,11 +10,7 @@ class RoutingRegistryDef extends RoutingRegistry[RoutingState] {
   def matchState(state: RoutingState): Url =
     Url(state2Url.apply(state))
 
-  private val url2State: PartialFunction[String, RoutingState] = {
+  private val (url2State, state2Url) = Bidirectional[String, RoutingState] {
     case "" => IndexState
-  }
-
-  private val state2Url: PartialFunction[RoutingState, String] = {
-    case IndexState => ""
   }
 }

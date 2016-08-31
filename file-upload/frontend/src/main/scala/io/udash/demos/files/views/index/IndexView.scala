@@ -2,7 +2,7 @@ package io.udash.demos.files.views.index
 
 import io.udash._
 import io.udash.bootstrap.UdashBootstrap
-import io.udash.bootstrap.button.UdashButton
+import io.udash.bootstrap.button.{ButtonStyle, UdashButton}
 import io.udash.bootstrap.form.UdashForm
 import io.udash.bootstrap.label.UdashLabel
 import io.udash.bootstrap.panel.UdashPanel
@@ -29,19 +29,17 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
   }
 
   override def getTemplate: Modifier = {
-
-    val fileInput = FileInput("files", acceptMultipleFiles = Property(true), selectedFiles = model.subSeq(_.selectedFiles))()
-    val sendButton = UdashButton(block = true)("Send")
+    val sendButton = UdashButton(block = true, buttonStyle = ButtonStyle.Primary)("Send")
     model.subProp(_.state.state).listen {
       case FileUploadState.InProgress => sendButton.disabled.set(true)
       case _ => sendButton.disabled.set(false)
     }
 
     val progressBar = UdashProgressBar.animated()()
-    val progress = model.subProp(_.state.bytesSent).combine(model.subProp(_.state.bytesTotal))((sent, total) => {
-      println(sent, total, (100 * sent) / total)
-      ((100 * sent) / total).toInt
-    })
+    val progress = model.subProp(_.state.bytesSent)
+      .combine(model.subProp(_.state.bytesTotal))(
+        (sent, total) => ((100 * sent) / total).toInt
+      )
     progress.listen(progressBar.progress.set)
 
     sendButton.listen {
@@ -52,7 +50,10 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
     div(
       h3("Select files and click send..."),
       UdashForm(
-        UdashForm.fileInput()("Select files")("files", acceptMultipleFiles = Property(true), selectedFiles = model.subSeq(_.selectedFiles)),
+        UdashForm.fileInput()("Select files")("files",
+          acceptMultipleFiles = Property(true),
+          selectedFiles = model.subSeq(_.selectedFiles)
+        ),
         sendButton.render
       ).render,
       h3("Check upload progress here..."),
