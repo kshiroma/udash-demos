@@ -1,6 +1,9 @@
+import Dependencies._
+import UdashBuild._
+
 name := "todo-rpc"
 
-version in ThisBuild := "0.3.0-SNAPSHOT"
+version in ThisBuild := "0.4.0-SNAPSHOT"
 scalaVersion in ThisBuild := "2.11.8"
 organization in ThisBuild := "io.udash"
 crossPaths in ThisBuild := false

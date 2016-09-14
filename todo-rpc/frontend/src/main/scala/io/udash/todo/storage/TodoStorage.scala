@@ -3,7 +3,6 @@ package io.udash.todo.storage
 import io.udash.todo.Context
 import io.udash.todo.rpc.model.Todo
 import org.scalajs.dom.ext.LocalStorage
-import upickle.default._
 
 import scala.collection.mutable
 import scala.concurrent.Future
