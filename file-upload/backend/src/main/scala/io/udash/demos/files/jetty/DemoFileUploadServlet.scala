@@ -14,7 +14,7 @@ class DemoFileUploadServlet(uploadDir: String) extends FileUploadServlet(Set("fi
   new File(uploadDir).mkdir()
 
   override protected def handleFile(name: String, content: InputStream): Unit = {
-    val targetName: String = s"${UUID.randomUUID()}_$name"
+    val targetName: String = s"${UUID.randomUUID()}_${name.replaceAll("[^a-zA-Z0-9.-]", "_")}"
     val targetFile = new File(uploadDir, targetName)
     Files.copy(content, targetFile.toPath)
     FilesStorage.add(
