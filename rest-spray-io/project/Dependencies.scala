@@ -6,7 +6,7 @@ object Dependencies extends Build {
   val udashJQueryVersion = "1.0.0"
 
   val logbackVersion = "1.1.3"
-  val jettyVersion = "9.3.8.v20160314"
+  val jettyVersion = "9.3.11.v20160721"
   val akkaVersion = "2.4.7"
   val sprayVersion = "1.3.1"
 

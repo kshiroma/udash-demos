@@ -35,6 +35,7 @@ class RootView extends View {
 
   override def renderChild(view: View): Unit = {
     import io.udash.wrappers.jquery._
+    jQ(child).children().remove()
     view.getTemplate.applyTo(child)
   }
 }
