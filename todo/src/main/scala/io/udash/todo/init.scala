@@ -9,6 +9,7 @@ import scala.scalajs.js.annotation.JSExport
 
 object Context {
   implicit val executionContext = scalajs.concurrent.JSExecutionContext.Implicits.queue
+
   private val routingRegistry = new RoutingRegistryDef
   private val viewPresenterRegistry = new StatesToViewPresenterDef
 

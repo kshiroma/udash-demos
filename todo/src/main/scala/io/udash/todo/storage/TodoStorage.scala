@@ -3,7 +3,6 @@ package io.udash.todo.storage
 import org.scalajs.dom.ext.LocalStorage
 import upickle.default._
 
-/** Storage Todo model. */
 case class Todo(title: String, completed: Boolean)
 
 trait TodoStorage {
