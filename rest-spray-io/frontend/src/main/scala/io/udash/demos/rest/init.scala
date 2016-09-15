@@ -3,12 +3,13 @@ package io.udash.demos.rest
 import io.udash._
 import io.udash.demos.rest.model.{Contact, ContactId}
 import io.udash.wrappers.jquery._
+import org.scalajs.dom
 import org.scalajs.dom.{Element, document}
 
 import scala.concurrent.Future
 import scala.scalajs.js.JSApp
 import scala.scalajs.js.annotation.JSExport
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 object Context {
   implicit val executionContext = scalajs.concurrent.JSExecutionContext.Implicits.queue
@@ -18,7 +19,7 @@ object Context {
   implicit val applicationInstance = new Application[RoutingState](routingRegistry, viewPresenterRegistry, RootState)
 
   import io.udash.rest._
-  val restServer = DefaultServerREST[MainServerREST]("127.0.0.1", 8080, "/api/")
+  val restServer = DefaultServerREST[MainServerREST](dom.window.location.hostname, Try(dom.window.location.port.toInt).getOrElse(80), "/api/")
 }
 
 object Init extends JSApp with StrictLogging {

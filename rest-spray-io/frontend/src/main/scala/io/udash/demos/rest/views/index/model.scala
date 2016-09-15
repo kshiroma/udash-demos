@@ -13,20 +13,4 @@ trait DataLoadingModel[T] {
   def elements: Seq[T]
 }
 
-trait PhoneBookExtInfo {
-  def id: PhoneBookId
-  def name: String
-  def description: String
-  def contactsCount: Int
-}
-
-object PhoneBookExtInfo {
-  def apply(_id: PhoneBookId, _name: String, _description: String, _contactsCount: Int): PhoneBookExtInfo = {
-    new PhoneBookExtInfo {
-      override def description: String = _description
-      override def name: String = _name
-      override def contactsCount: Int = _contactsCount
-      override def id: PhoneBookId = _id
-    }
-  }
-}
+case class PhoneBookExtInfo(id: PhoneBookId, name: String, description: String, contactsCount: Int)

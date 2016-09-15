@@ -11,17 +11,15 @@ class RootView extends View {
 
   private var child: Element = div().render
 
-  private val content = div(
-    h1("todos"),
-    child
-  ).render
-
-  override def getTemplate: Element = content
+  override val getTemplate: Modifier =
+    div(
+      h1("todos"),
+      child
+    )
 
   override def renderChild(view: View): Unit = {
-    import io.udash.wrappers.jquery._
-    val newChild = view.getTemplate
-    jQ(child).replaceWith(newChild)
-    child = newChild
+    for (i <- 0 until child.childNodes.length)
+      child.removeChild(child.childNodes(i))
+    view.getTemplate.applyTo(child)
   }
 }

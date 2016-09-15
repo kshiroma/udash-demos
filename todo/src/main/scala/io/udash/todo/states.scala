@@ -7,13 +7,9 @@ sealed abstract class RoutingState(val parentState: RoutingState) extends State 
 }
 
 case object RootState extends RoutingState(null)
-
 case object ErrorState extends RoutingState(RootState)
 
 sealed abstract class TodoState extends RoutingState(RootState)
-
 case object TodoAllState extends TodoState
-
 case object TodoActiveState extends TodoState
-
 case object TodoCompletedState extends TodoState
