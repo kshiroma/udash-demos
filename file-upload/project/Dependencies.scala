@@ -2,7 +2,7 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt._
 
 object Dependencies extends Build {
-  val udashVersion = "0.4.0-SNAPSHOT"
+  val udashVersion = "0.4.0"
 
   val logbackVersion = "1.1.3"
   val jettyVersion = "9.3.11.v20160721"
