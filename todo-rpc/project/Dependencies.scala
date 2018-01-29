@@ -2,12 +2,11 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt._
 
 object Dependencies {
-  val udashVersion = "0.4.0"
-  val udashJQueryVersion = "1.0.0"
-  val uPickleVersion = "0.4.0"
+  val udashVersion = "0.6.0-RC3"
+  val udashJQueryVersion = "1.1.0"
 
   val logbackVersion = "1.1.3"
-  val jettyVersion = "9.3.11.v20160721"
+  val jettyVersion = "9.4.8.v20171121"
 
   val crossDeps = Def.setting(Seq[ModuleID](
     "io.udash" %% "udash-core-shared" % udashVersion,
@@ -17,6 +16,7 @@ object Dependencies {
   val frontendDeps = Def.setting(Seq[ModuleID](
     "io.udash" %%% "udash-core-frontend" % udashVersion,
     "io.udash" %%% "udash-rpc-frontend" % udashVersion,
+    "io.udash" %%% "udash-css-frontend" % udashVersion,
     "io.udash" %%% "udash-jquery" % udashJQueryVersion
   ))
 
