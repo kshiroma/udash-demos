@@ -2,9 +2,8 @@ package io.udash.todo.views
 
 import io.udash._
 import io.udash.todo.ErrorState
-import org.scalajs.dom.Element
 
-object ErrorViewPresenter extends DefaultViewPresenterFactory[ErrorState.type](() => new ErrorView)
+object ErrorViewFactory extends StaticViewFactory[ErrorState.type](() => new ErrorView)
 
 class ErrorView extends FinalView {
   import scalatags.JsDom.all._

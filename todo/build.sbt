@@ -1,36 +1,35 @@
 name := "todomvc"
 
-version in ThisBuild := "0.4.0-SNAPSHOT"
-scalaVersion in ThisBuild := "2.11.8"
-organization in ThisBuild := "io.udash"
-crossPaths in ThisBuild := false
-scalacOptions in ThisBuild ++= Seq(
-  "-feature",
-  "-deprecation",
-  "-unchecked",
-  "-language:implicitConversions",
-  "-language:existentials",
-  "-language:dynamics",
-  "-Xfuture",
-  "-Xfatal-warnings",
-  "-Xlint:_,-missing-interpolator,-adapted-args"
-)
+inThisBuild(Seq(
+  version := "0.6.0-SNAPSHOT",
+  scalaVersion := "2.12.4",
+  organization := "io.udash",
+  scalacOptions ++= Seq(
+    "-feature",
+    "-deprecation",
+    "-unchecked",
+    "-language:implicitConversions",
+    "-language:existentials",
+    "-language:dynamics",
+    "-Xfuture",
+    "-Xfatal-warnings",
+    "-Xlint:_,-missing-interpolator,-adapted-args"
+  ),
+))
 
 val generatedDir = file("generated")
 
-val todomvc = project.in(file(".")).enablePlugins(ScalaJSPlugin)
+val todomvc = project.in(file("."))
+  .enablePlugins(ScalaJSPlugin)
   .settings(
-    emitSourceMaps := true,
-    persistLauncher := true,
+    mainClass := Some("io.udash.todo.JSLauncher"),
+    scalaJSUseMainModuleInitializer := true,
 
-    libraryDependencies ++= frontendDeps.value,
+    libraryDependencies ++= Dependencies.frontendDeps.value,
 
-    /* move these files out of target/. Also sets up same file for both fast and full optimization */
-    crossTarget  in (Compile, fullOptJS)                     := generatedDir,
-    crossTarget  in (Compile, fastOptJS)                     := generatedDir,
-    crossTarget  in (Compile, packageJSDependencies)         := generatedDir,
-    crossTarget  in (Compile, packageScalaJSLauncher)        := generatedDir,
-    crossTarget  in (Compile, packageMinifiedJSDependencies) := generatedDir,
-    artifactPath in (Compile, fastOptJS)                     :=
-      ((crossTarget in (Compile, fastOptJS)).value / ((moduleName in fastOptJS).value + "-opt.js"))
+    // Target files for Scala.js plugin
+    Compile / fastOptJS / artifactPath := generatedDir / "todomvc.js",
+    Compile / fullOptJS / artifactPath := generatedDir / "todomvc.js",
+    Compile / packageJSDependencies / artifactPath := generatedDir / "todomvc-deps.js",
+    Compile / packageMinifiedJSDependencies / artifactPath := generatedDir / "todomvc-deps.js",
   )

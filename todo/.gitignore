@@ -130,3 +130,4 @@ project/plugins/project/
 
 
 node_modules/*
+generated/*
