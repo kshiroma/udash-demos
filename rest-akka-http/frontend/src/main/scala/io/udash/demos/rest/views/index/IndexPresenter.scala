@@ -5,11 +5,12 @@ import io.udash.demos.rest.IndexState
 import io.udash.demos.rest.model.{Contact, ContactId, PhoneBookId, PhoneBookInfo}
 import org.scalajs.dom
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 class IndexPresenter(model: ModelProperty[IndexViewModel]) extends Presenter[IndexState.type] {
-  import io.udash.demos.rest.Context._
+  import io.udash.demos.rest.ApplicationContext._
 
   override def handleState(state: IndexState.type): Unit =
     refresh()
@@ -17,9 +18,7 @@ class IndexPresenter(model: ModelProperty[IndexViewModel]) extends Presenter[Ind
   def removeContact(id: ContactId): Unit = {
     restServer.contacts(id).remove() onComplete {
       case Success(removedContact) =>
-        val elements = model.subSeq(_.contacts.elements)
-        val removed = elements.get.find(_.id == id)
-        removed.foreach(elements.remove)
+        model.subSeq(_.contacts.elements).remove(removedContact)
         refreshPhoneBooksSizes(model.subModel(_.books))
       case Failure(ex) =>
         dom.window.alert(s"Contact removing failed! ($ex)")
@@ -28,7 +27,7 @@ class IndexPresenter(model: ModelProperty[IndexViewModel]) extends Presenter[Ind
 
   def removePhoneBook(id: PhoneBookId): Unit = {
     restServer.phoneBooks(id).remove() onComplete {
-      case Success(removedContact) =>
+      case Success(_) =>
         val elements = model.subSeq(_.books.elements)
         val removed = elements.get.find(_.id == id)
         removed.foreach(elements.remove)
@@ -62,8 +61,14 @@ class IndexPresenter(model: ModelProperty[IndexViewModel]) extends Presenter[Ind
     elements onComplete {
       case Success(elems) =>
         model.subProp(_.loaded).set(true)
-        model.subSeq(_.elements).remove(0, model.subSeq(_.elements).get.size)
-        elems.foreach(el => model.subSeq(_.elements).append(PhoneBookExtInfo(el.id, el.name, el.description, 0)))
+        model.subSeq(_.elements).clear()
+
+        elems.foreach { el =>
+          model.subSeq(_.elements).append(
+            PhoneBookExtInfo(el.id, el.name, el.description, 0)
+          )
+        }
+
         refreshPhoneBooksSizes(model)
       case Failure(ex) =>
         model.subProp(_.loadingText).set(s"Error: $ex")
@@ -71,12 +76,15 @@ class IndexPresenter(model: ModelProperty[IndexViewModel]) extends Presenter[Ind
   }
 
   private def refreshPhoneBooksSizes(model: ModelProperty[DataLoadingModel[PhoneBookExtInfo]]): Unit = {
-    model.subSeq(_.elements).elemProperties.foreach(el => {
+    model.subSeq(_.elements).elemProperties.foreach { el =>
+      val element = el.asModel
       restServer.phoneBooks(el.get.id).contacts().count() onComplete {
-        case Success(count) => el.asModel.subProp(_.contactsCount).set(count)
+        case Success(count) =>
+          element.subProp(_.contactsCount).set(count)
         case Failure(ex) =>
           dom.window.alert(s"Contacts count for book ${el.get.id} loading failed: $ex")
-          el.asModel.subProp(_.contactsCount).set(-1)
-      }})
+          element.subProp(_.contactsCount).set(-1)
+      }
+    }
   }
 }

@@ -2,32 +2,58 @@ package io.udash.demos.rest.views.book
 
 import io.udash._
 import io.udash.bootstrap.BootstrapStyles
+import io.udash.bootstrap.UdashBootstrap.ComponentId
 import io.udash.bootstrap.button.{ButtonStyle, UdashButton}
 import io.udash.bootstrap.form.UdashForm
+import io.udash.css.CssView
 import io.udash.demos.rest.model.ContactId
-import org.scalajs.dom.Element
+import org.scalajs.dom.raw.Event
 
-class PhoneBookFormView(model: ModelProperty[PhoneBookEditorModel], presenter: PhoneBookFormPresenter) extends View {
+class PhoneBookFormView(model: ModelProperty[PhoneBookEditorModel], presenter: PhoneBookFormPresenter)
+  extends FinalView with CssView {
+
   import scalatags.JsDom.all._
 
-  val selectedStrings: SeqProperty[String] = model.subSeq(_.selectedContacts).transform(
+  private def onFormSubmit(ev: Event): Unit = {
+    if (model.subProp(_.isNewBook).get) presenter.createPhoneBook()
+    else presenter.updatePhoneBook()
+  }
+
+  private val selectedStrings: SeqProperty[String] = model.subSeq(_.selectedContacts).transform(
     (id: ContactId) => id.value.toString,
     (s: String) => ContactId(s.toInt)
   )
 
-  val saveButton = UdashButton(buttonStyle = ButtonStyle.Primary)(
+  private val saveButton = UdashButton(buttonStyle = ButtonStyle.Primary)(
+    tpe := "submit",
     produce(model.subProp(_.isNewBook)) {
       case true => span("Create").render
       case false => span("Save changes").render
     }
   )
 
-  saveButton.listen {
-    case UdashButton.ButtonClickEvent(_) =>
-      model.subProp(_.isNewBook).get match {
-        case true => presenter.createPhoneBook()
-        case false => presenter.updatePhoneBook()
-      }
+  private val contactsForm = produce(model.subProp(_.isNewBook)) {
+    case true =>
+      h3("Create phone book to manage contacts").render
+    case false =>
+      div(
+        h3("Contacts in book"),
+        produce(model.subSeq(_.allContacts)) { contacts =>
+          val idToName = contacts.map(c => (c.id.value.toString, c)).toMap
+          UdashForm(
+            UdashForm.checkboxes()(
+              selectedStrings,
+              idToName.keys.toSeq,
+              decorator = { (input, id) =>
+                label(BootstrapStyles.Form.checkbox)(input, {
+                  val contact = idToName(id)
+                  s"${contact.firstName} ${contact.lastName}"
+                }).render
+              }
+            )
+          ).render
+        }
+      ).render
   }
 
   private val content = div(
@@ -41,7 +67,8 @@ class PhoneBookFormView(model: ModelProperty[PhoneBookEditorModel], presenter: P
             case false => h2("Phone Book editor").render
           },
 
-          UdashForm(
+          UdashForm(onFormSubmit _)(
+            ComponentId("book-form"),
             UdashForm.group(
               UdashForm.textInput()("Name: ")(model.subProp(_.name))
             ),
@@ -53,32 +80,10 @@ class PhoneBookFormView(model: ModelProperty[PhoneBookEditorModel], presenter: P
             )
           ).render,
 
-          produce(model.subProp(_.isNewBook)) {
-            case true => h3("Create phone book to manage contacts").render
-            case false => div(
-              h3("Contacts in book"),
-              produce(model.subSeq(_.allContacts))(contacts => {
-                UdashForm(
-                  {
-                    val tmpMap = contacts.map(c => (c.id.value.toString, c)).toMap
-                    UdashForm.checkboxes()(
-                      selectedStrings, tmpMap.keys.toSeq,
-                      decorator = (input, id) =>
-                        label(BootstrapStyles.Form.checkbox)(input, {
-                          val contact = tmpMap(id)
-                          s"${contact.firstName} ${contact.lastName}"
-                        }).render
-                    )
-                  }
-                ).render
-              })
-            ).render
-          }
+          contactsForm
         ).render
     }
   ).render
 
   override def getTemplate: Modifier = content
-
-  override def renderChild(view: View): Unit = {}
 }

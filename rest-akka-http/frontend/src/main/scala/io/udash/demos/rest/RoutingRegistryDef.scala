@@ -2,7 +2,8 @@ package io.udash.demos.rest
 
 import io.udash._
 import io.udash.demos.rest.model.{ContactId, PhoneBookId}
-import io.udash.utils.Bidirectional
+
+import scala.util.Try
 
 class RoutingRegistryDef extends RoutingRegistry[RoutingState] {
   def matchUrl(url: Url): RoutingState =
@@ -14,9 +15,9 @@ class RoutingRegistryDef extends RoutingRegistry[RoutingState] {
   private val url2State: PartialFunction[String, RoutingState] = {
     case "" => IndexState
     case "/contact" => ContactFormState()
-    case "/contact" /:/ arg => ContactFormState(Some(ContactId(arg.toInt)))
+    case "/contact" / arg => ContactFormState(Try(ContactId(arg.toInt)).toOption)
     case "/book" => PhoneBookFormState()
-    case "/book" /:/ arg => PhoneBookFormState(Some(PhoneBookId(arg.toInt)))
+    case "/book" / arg => PhoneBookFormState(Try(PhoneBookId(arg.toInt)).toOption)
   }
 
   private val state2Url: PartialFunction[RoutingState, String] = {

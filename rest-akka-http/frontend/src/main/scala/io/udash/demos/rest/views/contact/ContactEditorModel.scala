@@ -1,15 +1,18 @@
 package io.udash.demos.rest.views.contact
 
 import io.udash.demos.rest.model.ContactId
+import io.udash.properties.HasModelPropertyCreator
 
-trait ContactEditorModel {
-  def loaded: Boolean
-  def loadingText: String
+case class ContactEditorModel(
+  loaded: Boolean = false,
+  loadingText: String = "",
 
-  def isNewContact: Boolean
-  def id: ContactId
-  def firstName: String
-  def lastName: String
-  def phone: String
-  def email: String
-}
+  isNewContact: Boolean = false,
+  id: ContactId = ContactId(-1),
+  firstName: String = "",
+  lastName: String = "",
+  phone: String = "",
+  email: String = ""
+)
+
+object ContactEditorModel extends HasModelPropertyCreator[ContactEditorModel]

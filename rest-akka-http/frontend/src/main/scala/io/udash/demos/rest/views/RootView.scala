@@ -1,21 +1,18 @@
 package io.udash.demos.rest.views
 
 import io.udash._
+import io.udash.bootstrap.utils.UdashJumbotron
 import io.udash.bootstrap.{BootstrapStyles, UdashBootstrap}
-import io.udash.bootstrap.utils.{UdashJumbotron, UdashPageHeader}
+import io.udash.css._
 import io.udash.demos.rest.RootState
-import org.scalajs.dom.Element
-
-import scalatags.JsDom.tags2.main
 import io.udash.demos.rest.views.components.Header
 
-object RootViewPresenter extends DefaultViewPresenterFactory[RootState.type](() => new RootView)
+import scalatags.JsDom.tags2.main
 
-class RootView extends View {
-  import io.udash.demos.rest.Context._
+object RootViewFactory extends StaticViewFactory[RootState.type](() => new RootView)
+
+class RootView extends ContainerView with CssView {
   import scalatags.JsDom.all._
-
-  private val child: Element = div().render
 
   private val content = div(
     UdashBootstrap.loadBootstrapStyles(),
@@ -23,19 +20,13 @@ class RootView extends View {
     main(BootstrapStyles.container)(
       div(
         UdashJumbotron(
-          h1("rest-spray-io"),
+          h1("REST with Akka HTTP server"),
           p("Welcome in the Udash REST and the Udash Bootstrap modules demo!")
         ).render,
-        child
+        childViewContainer
       )
     )
   ).render
 
   override def getTemplate: Modifier = content
-
-  override def renderChild(view: View): Unit = {
-    import io.udash.wrappers.jquery._
-    jQ(child).children().remove()
-    view.getTemplate.applyTo(child)
-  }
 }

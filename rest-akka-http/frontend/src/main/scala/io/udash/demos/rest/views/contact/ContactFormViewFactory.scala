@@ -2,13 +2,12 @@ package io.udash.demos.rest.views.contact
 
 import io.udash._
 import io.udash.core.Presenter
+import io.udash.demos.rest.ContactFormState
 import io.udash.demos.rest.model.ContactId
-import io.udash.demos.rest.{ContactFormState, Context}
 
-case class ContactFormViewPresenter(id: Option[ContactId]) extends ViewPresenter[ContactFormState] {
+case class ContactFormViewFactory(id: Option[ContactId]) extends ViewFactory[ContactFormState] {
   override def create(): (View, Presenter[ContactFormState]) = {
-    import Context._
-    val model = ModelProperty[ContactEditorModel]
+    val model = ModelProperty(ContactEditorModel()) // use default values defined in model
     val presenter = new ContactFormPresenter(model)
     val view = new ContactFormView(model, presenter)
     (view, presenter)

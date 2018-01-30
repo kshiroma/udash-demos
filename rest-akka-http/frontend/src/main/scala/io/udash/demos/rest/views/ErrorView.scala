@@ -2,18 +2,12 @@ package io.udash.demos.rest.views
 
 import io.udash._
 import io.udash.demos.rest.IndexState
-import org.scalajs.dom.Element
 
-object ErrorViewPresenter extends DefaultViewPresenterFactory[IndexState.type](() => new ErrorView)
+object ErrorViewFactory extends StaticViewFactory[IndexState.type](() => new ErrorView)
 
-class ErrorView extends View {
+class ErrorView extends FinalView {
   import scalatags.JsDom.all._
 
-  private val content = h3(
-    "URL not found!"
-  ).render
-
-  override def getTemplate: Modifier = content
-
-  override def renderChild(view: View): Unit = {}
+  override def getTemplate: Modifier =
+    h3("URL not found!").render
 }
