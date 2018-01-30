@@ -1,5 +1,3 @@
-import org.scalajs.sbtplugin.ScalaJSPlugin.AutoImport.scalaJSUseMainModuleInitializer
-
 name := "rest-akka-http"
 
 inThisBuild(Seq(

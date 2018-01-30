@@ -19,9 +19,8 @@ class ApplicationServer(val port: Int, resourceBase: String) {
   contextHandler.setGzipHandler(new GzipHandler)
   server.setHandler(contextHandler)
 
-  def start() = server.start()
-
-  def stop() = server.stop()
+  def start(): Unit = server.start()
+  def stop(): Unit = server.stop()
 
   private val appHolder = {
     val appHolder = new ServletHolder(new DefaultServlet)
@@ -52,8 +51,6 @@ class ApplicationServer(val port: Int, resourceBase: String) {
       new DefaultExposesServerRPC[MainServerRPC](new MainRpcEndpoint)
     )
     val framework = new DefaultAtmosphereFramework(config)
-
-    framework.init()
 
     val atmosphereHolder = new ServletHolder(new RpcServlet(framework))
     atmosphereHolder.setAsyncSupported(true)
