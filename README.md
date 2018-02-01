@@ -8,13 +8,13 @@ A demo presenting usage of the Udash file upload/download utilities. It also use
 
 ## Todo
 
-A demo based on [TodoMVC](http://todomvc.com/). This is frontend-only project.
+A demo based on [TodoMVC](http://todomvc.com/). This is a frontend-only project.
 
 ## Todo RPC
 
-A demo based on [TodoMVC](http://todomvc.com/) with server-side storage using the Udash RPC system. 
+A demo based on [TodoMVC](http://todomvc.com/) with a server-side storage using the Udash RPC system. 
 
 ## Udash REST with Bootstrap Components and Akka HTTP
 
-A demo presenting usage of the Udash REST module. It serves REST API with Akka http in the backend application and uses it through type safe Udash REST interface in the frontend.
-This demo uses the Udash Bootstrap Components library.
+A demo presenting usage of the Udash REST module. It serves REST API with Akka HTTP in the backend application 
+and uses it through type-safe Udash REST interfaces in the frontend. This demo uses the Udash Bootstrap Components library.

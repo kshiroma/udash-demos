@@ -33,10 +33,14 @@ The build tool for this project is [sbt](http://www.scala-sbt.org), which is
 set up with a [plugin](http://www.scala-js.org/doc/sbt-plugin.html) 
 to enable compilation and packaging of Scala.js web applications. 
 
-The scala.js plugin for sbt supports two compilation modes:
+The Scala.js plugin for SBT supports two compilation modes:
  
-* `fullOptJS` is a full program optimization, which is slower
+* `fullOptJS` is a full program optimization, which is slower,
 * `fastOptJS` is fast, but produces large generated javascript files - use it for development.
+
+The configuration of this project provides additional SBT tasks: `compileStatics` and `compileAndOptimizeStatics`. 
+These tasks compile the sources to JavaScript and prepare other static files. The former task uses `fastOptJS`,
+the latter `fullOptJS`.
 
 After installation, run `sbt` like this:
 
@@ -44,16 +48,27 @@ After installation, run `sbt` like this:
 $ sbt
 ```
 
-You can compile the project like this:
+You can compile the project:
 
 ```
 sbt> compile 
 ```
 
-Then you can run the Jetty server as following:
+You can compile static frontend files as follows:
+
+```
+sbt> compileStatics
+```
+
+Then you can run the Jetty server:
 
 ```
 sbt> run
 ```
 
 Open: [http://localhost:8080/](http://localhost:8080/)
+
+## What's next?
+
+Take a look at [Udash application template](https://github.com/UdashFramework/udash.g8). You can generate
+customized SBT project with Udash application by calling: `sbt new UdashFramework/udash.g8`. 
