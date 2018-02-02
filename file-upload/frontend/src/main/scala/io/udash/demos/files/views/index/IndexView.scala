@@ -2,6 +2,7 @@ package io.udash.demos.files.views.index
 
 import io.udash._
 import io.udash.bootstrap.UdashBootstrap
+import io.udash.bootstrap.UdashBootstrap.ComponentId
 import io.udash.bootstrap.button.{ButtonStyle, UdashButton}
 import io.udash.bootstrap.form.UdashForm
 import io.udash.bootstrap.label.UdashLabel
@@ -10,14 +11,14 @@ import io.udash.bootstrap.progressbar.UdashProgressBar
 import io.udash.bootstrap.table.UdashTable
 import io.udash.demos.files.ApplicationServerContexts
 import org.scalajs.dom.File
+import org.scalajs.dom.raw.Event
 
 class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter) extends FinalView {
-  import io.udash.demos.files.Context._
-  import FileUploader._
+  import io.udash.utils.FileUploader._
 
   import scalatags.JsDom.all._
 
-  def normalizeSize(size: Double): String = {
+  private def normalizeSize(size: Double): String = {
     val units = Iterator("B", "KB", "MB", "GB", "TB")
     var selectedUnit = units.next()
     var sizeWithUnit = size
@@ -28,28 +29,27 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
     "%.2f %s".format(sizeWithUnit, selectedUnit)
   }
 
+  private def onFormSubmit(ev: Event): Unit = {
+    presenter.uploadSelectedFiles()
+  }
+
   override def getTemplate: Modifier = {
-    val sendButton = UdashButton(block = true, buttonStyle = ButtonStyle.Primary)("Send")
+    val sendButton = UdashButton(block = true, buttonStyle = ButtonStyle.Primary)(tpe := "submit", "Send")
     model.subProp(_.state.state).listen {
       case FileUploadState.InProgress => sendButton.disabled.set(true)
       case _ => sendButton.disabled.set(false)
     }
 
-    val progressBar = UdashProgressBar.animated()()
     val progress = model.subProp(_.state.bytesSent)
       .combine(model.subProp(_.state.bytesTotal))(
         (sent, total) => ((100 * sent) / total).toInt
       )
-    progress.listen(progressBar.progress.set)
-
-    sendButton.listen {
-      case UdashButton.ButtonClickEvent(_) =>
-        presenter.uploadSelectedFiles()
-    }
+    val progressBar = UdashProgressBar.animated(progress)()
 
     div(
       h3("Select files and click send..."),
-      UdashForm(
+      UdashForm(onFormSubmit _)(
+        ComponentId("files-form"),
         UdashForm.fileInput()("Select files")("files",
           acceptMultipleFiles = Property(true),
           selectedFiles = model.subSeq(_.selectedFiles)

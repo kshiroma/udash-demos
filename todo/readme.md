@@ -39,9 +39,9 @@ The build tool for this project is [sbt](http://www.scala-sbt.org), which is
 set up with a [plugin](http://www.scala-js.org/doc/sbt-plugin.html) 
 to enable compilation and packaging of Scala.js web applications. 
 
-The scala.js plugin for sbt supports two compilation modes:
+The Scala.js plugin for SBT supports two compilation modes:
  
-* `fullOptJS` is a full program optimization, which is slower
+* `fullOptJS` is a full program optimization, which is slower,
 * `fastOptJS` is fast, but produces large generated javascript files - use it for development.
 
 After installation, run `sbt` like this:
@@ -61,3 +61,10 @@ or enable continuous compilation:
 ```
 sbt> ~fastOptJS
 ```
+
+After compilation open the `index.html` file from the root project directory in your browser.  
+
+## What's next?
+
+Take a look at [Udash application template](https://github.com/UdashFramework/udash.g8). You can generate
+customized SBT project with Udash application by calling: `sbt new UdashFramework/udash.g8`. 

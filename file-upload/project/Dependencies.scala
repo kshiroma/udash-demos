@@ -1,11 +1,11 @@
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import sbt._
 
-object Dependencies extends Build {
-  val udashVersion = "0.4.0"
+object Dependencies {
+  val udashVersion = "0.6.0"
 
   val logbackVersion = "1.1.3"
-  val jettyVersion = "9.3.11.v20160721"
+  val jettyVersion = "9.4.8.v20171121"
 
   val crossDeps = Def.setting(Seq[ModuleID](
     "io.udash" %%% "udash-core-shared" % udashVersion,

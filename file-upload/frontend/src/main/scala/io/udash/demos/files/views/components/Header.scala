@@ -1,24 +1,25 @@
 package io.udash.demos.files.views.components
+import io.udash.SeqProperty
 import io.udash.bootstrap.navs.{UdashNav, UdashNavbar}
-import io.udash.demos.files.Context._
-import io.udash.demos.files.IndexState
+import io.udash.demos.files.{ApplicationContext, IndexState}
 import io.udash.demos.files.config.ExternalUrls
-import io.udash.properties.seq.SeqProperty
 import org.scalajs.dom.raw.Element
 
 import scalatags.JsDom.all._
 
 object Header {
-  private val brand = a(href := IndexState.url)(
+  class NavItem(val href: String, val imageSrc: String, val name: String)
+
+  private val brand = a(href := IndexState.url(ApplicationContext.applicationInstance))(
     Image("udash_logo_m.png", "Udash Framework", style := "height: 44px; margin-top: 10px;")
   ).render
 
-  case class NavItem(href: String, imageSrc: String, name: String)
   private val navItems = SeqProperty(
-    NavItem(ExternalUrls.udashGithub, "icon_github.png", "Github"),
-    NavItem(ExternalUrls.stackoverflow, "icon_stackoverflow.png", "StackOverflow"),
-    NavItem(ExternalUrls.avsystem, "icon_avsystem.png", "Proudly made by AVSystem")
+    new NavItem(ExternalUrls.udashGithub, "icon_github.png", "Github"),
+    new NavItem(ExternalUrls.stackoverflow, "icon_stackoverflow.png", "StackOverflow"),
+    new NavItem(ExternalUrls.avsystem, "icon_avsystem.png", "Proudly made by AVSystem")
   )
+
   private val nav = UdashNav.navbar(navItems)(
     (prop) => {
       val item = prop.get
@@ -28,11 +29,11 @@ object Header {
     }
   )
 
-  val header = UdashNavbar.inverted(
+  private val header = UdashNavbar.inverted(
     brand = brand,
     nav = nav
   )
 
-  lazy val getTemplate: Element =
+  val getTemplate: Element =
     header.render
 }

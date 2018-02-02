@@ -1,4 +1,5 @@
 package io.udash.demos.rest.config
+
 object ExternalUrls {
   val udashGithub = "https://github.com/UdashFramework/"
   val udashDemos = "https://github.com/UdashFramework/udash-demos"

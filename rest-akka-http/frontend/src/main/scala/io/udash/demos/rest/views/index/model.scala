@@ -1,16 +1,23 @@
 package io.udash.demos.rest.views.index
 
 import io.udash.demos.rest.model.{Contact, PhoneBookId}
+import io.udash.properties.{HasModelPropertyCreator, ModelPropertyCreator, PropertyCreator}
 
-trait IndexViewModel {
-  def books: DataLoadingModel[PhoneBookExtInfo]
-  def contacts: DataLoadingModel[Contact]
-}
+class IndexViewModel(
+  val books: DataLoadingModel[PhoneBookExtInfo] = new DataLoadingModel[PhoneBookExtInfo](),
+  val contacts: DataLoadingModel[Contact] = new DataLoadingModel[Contact]()
+)
+object IndexViewModel extends HasModelPropertyCreator[IndexViewModel]
 
-trait DataLoadingModel[T] {
-  def loaded: Boolean
-  def loadingText: String
-  def elements: Seq[T]
+class DataLoadingModel[T](
+  val loaded: Boolean = false,
+  val loadingText: String = "",
+  val elements: Seq[T] = Seq.empty
+)
+object DataLoadingModel {
+  implicit def modelPropertyCreator[T : PropertyCreator]: ModelPropertyCreator[DataLoadingModel[T]] =
+    ModelPropertyCreator.materialize[DataLoadingModel[T]]
 }
 
 case class PhoneBookExtInfo(id: PhoneBookId, name: String, description: String, contactsCount: Int)
+object PhoneBookExtInfo extends HasModelPropertyCreator[PhoneBookExtInfo]

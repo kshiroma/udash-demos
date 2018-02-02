@@ -1,11 +1,11 @@
 package io.udash.todo.rpc
 
 import io.udash.todo.rpc.model.Todo
-import io.udash.todo.storage.RemoteTodoStorage
+import io.udash.todo.storage.TodoStorage
 
-class RPCService extends MainClientRPC {
+class RPCService(todoStorage: TodoStorage) extends MainClientRPC {
   override def storeUpdated(todos: Seq[Todo]): Unit =
-    RemoteTodoStorage.storeUpdated(todos)
+    todoStorage.storeUpdated(todos)
 }
 
        

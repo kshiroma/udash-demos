@@ -3,9 +3,9 @@ package io.udash.demos.files.views
 import io.udash._
 import io.udash.demos.files.IndexState
 
-object ErrorViewPresenter extends DefaultViewPresenterFactory[IndexState.type](() => new ErrorView)
+object ErrorViewFactory extends StaticViewFactory[IndexState.type](() => new ErrorView)
 
-class ErrorView extends View {
+class ErrorView extends FinalView {
   import scalatags.JsDom.all._
 
   private val content = h3(
@@ -13,6 +13,4 @@ class ErrorView extends View {
   ).render
 
   override def getTemplate: Modifier = content
-
-  override def renderChild(view: View): Unit = {}
 }

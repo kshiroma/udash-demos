@@ -4,11 +4,11 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import io.udash.demos.rest.api.PhoneBookWebService
+import io.udash.logging.CrossLogging
 
 import scala.io.StdIn
 
-object Launcher {
-
+object Launcher extends CrossLogging {
   def main(args: Array[String]): Unit = {
     implicit val system = ActorSystem("my-system")
     implicit val materializer = ActorMaterializer()
@@ -16,10 +16,9 @@ object Launcher {
     implicit val executionContext = system.dispatcher
 
     val service = new PhoneBookWebService
-
     val bindingFuture = Http().bindAndHandle(service.route, "localhost", 8080)
 
-    println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
+    logger.info(s"Server online at http://localhost:8080/\nPress Enter to stop...")
     StdIn.readLine() // let it run until user presses return
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port

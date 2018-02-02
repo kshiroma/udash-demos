@@ -12,6 +12,8 @@ import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, Unmarshaller}
 
 
 trait PhoneBookWebServiceSpec extends DefaultUdashSerialization {
+  private val staticsDir = "frontend/target/UdashStatics/WebContent"
+
   val phoneBookService: PhoneBookService
   val contactService: ContactService
 
@@ -41,13 +43,13 @@ trait PhoneBookWebServiceSpec extends DefaultUdashSerialization {
 
   val route = {
     path("") {
-      getFromFile("backend/target/UdashStatic/WebContent/index.html")
+      getFromFile(s"$staticsDir/index.html")
     } ~
     pathPrefix("scripts"){
-      getFromDirectory("backend/target/UdashStatic/WebContent/scripts")
+      getFromDirectory(s"$staticsDir/scripts")
     } ~
     pathPrefix("assets"){
-      getFromDirectory("backend/target/UdashStatic/WebContent/assets")
+      getFromDirectory(s"$staticsDir/assets")
     } ~
     pathPrefix("api") {
       pathPrefix("book") {

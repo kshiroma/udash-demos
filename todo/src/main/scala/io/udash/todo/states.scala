@@ -1,15 +1,18 @@
 package io.udash.todo
 
 import io.udash._
+import io.udash.todo.views.todo.TodosFilter
 
-sealed abstract class RoutingState(val parentState: RoutingState) extends State {
-  def url(implicit application: Application[RoutingState]): String = s"#${application.matchState(this).value}"
+sealed abstract class RoutingState(val parentState: Option[ContainerRoutingState]) extends State {
+  type HierarchyRoot = RoutingState
+
+  def url(implicit application: Application[RoutingState]): String =
+    s"#${application.matchState(this).value}"
 }
 
-case object RootState extends RoutingState(null)
-case object ErrorState extends RoutingState(RootState)
+sealed abstract class ContainerRoutingState(parentState: Option[ContainerRoutingState]) extends RoutingState(parentState) with ContainerState
+sealed abstract class FinalRoutingState(parentState: Option[ContainerRoutingState]) extends RoutingState(parentState) with FinalState
 
-sealed abstract class TodoState extends RoutingState(RootState)
-case object TodoAllState extends TodoState
-case object TodoActiveState extends TodoState
-case object TodoCompletedState extends TodoState
+object RootState extends ContainerRoutingState(None)
+object ErrorState extends FinalRoutingState(Some(RootState))
+case class TodoState(filter: TodosFilter) extends FinalRoutingState(Some(RootState))

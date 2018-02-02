@@ -4,6 +4,9 @@ import org.scalajs.dom.ext.LocalStorage
 import upickle.default._
 
 case class Todo(title: String, completed: Boolean)
+object Todo {
+  implicit def rw: ReadWriter[Todo] = macroRW
+}
 
 trait TodoStorage {
   def store(todo: Seq[Todo]): Unit

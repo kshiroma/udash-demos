@@ -3,15 +3,16 @@ package io.udash.demos.rest.views.contact
 import io.udash._
 import io.udash.core.Presenter
 import io.udash.demos.rest.model.{Contact, ContactId}
-import io.udash.demos.rest.{ContactFormState, Context, IndexState}
+import io.udash.demos.rest.{ContactFormState, ApplicationContext, IndexState}
 import org.scalajs.dom
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 class ContactFormPresenter(model: ModelProperty[ContactEditorModel]) extends Presenter[ContactFormState] {
-  import Context._
+  import ApplicationContext._
 
-  override def handleState(state: ContactFormState): Unit =
+  override def handleState(state: ContactFormState): Unit = {
     state match {
       case ContactFormState(None) =>
         model.subProp(_.loaded).set(true)
@@ -29,8 +30,9 @@ class ContactFormPresenter(model: ModelProperty[ContactEditorModel]) extends Pre
 
         loadContactData(id)
     }
+  }
 
-  def loadContactData(id: ContactId) =
+  def loadContactData(id: ContactId): Unit = {
     restServer.contacts(id).load() onComplete {
       case Success(contact) =>
         model.subProp(_.loaded).set(true)
@@ -42,8 +44,9 @@ class ContactFormPresenter(model: ModelProperty[ContactEditorModel]) extends Pre
       case Failure(ex) =>
         model.subProp(_.loadingText).set(s"Problem with contact details loading: $ex")
     }
+  }
 
-  def createContact(): Unit =
+  def createContact(): Unit = {
     restServer.contacts().create(Contact(
       ContactId(-1),
       model.subProp(_.firstName).get,
@@ -56,6 +59,7 @@ class ContactFormPresenter(model: ModelProperty[ContactEditorModel]) extends Pre
       case Failure(ex) =>
         dom.window.alert(s"Contact creation failed: $ex")
     }
+  }
 
   def updateContact(): Unit =
     restServer.contacts(model.subProp(_.id).get).update(Contact(
