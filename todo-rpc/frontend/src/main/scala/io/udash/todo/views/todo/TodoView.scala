@@ -7,6 +7,9 @@ import io.udash.todo.{ApplicationContext, TodoState}
 import org.scalajs.dom.ext.KeyCode
 import org.scalajs.dom.{Event, KeyboardEvent}
 
+import scala.concurrent.duration.DurationLong
+import scala.language.postfixOps
+
 class TodoView(model: ModelProperty[TodoViewModel], presenter: TodoPresenter) extends FinalView with CssView {
   import scalatags.JsDom.all._
   import scalatags.JsDom.tags2.section
@@ -19,7 +22,7 @@ class TodoView(model: ModelProperty[TodoViewModel], presenter: TodoPresenter) ex
 
   private val headerTemplate = {
     header(cls := "header")(
-      TextInput(model.subProp(_.newTodoName), debounce = None)(
+      TextInput(model.subProp(_.newTodoName), debounce = 0 millis)(
         cls := "new-todo",
         placeholder := "What needs to be done?",
         autofocus := true,
@@ -35,8 +38,7 @@ class TodoView(model: ModelProperty[TodoViewModel], presenter: TodoPresenter) ex
 
   private val listTemplate = {
     section(cls := "main")(
-      Checkbox(
-        model.subProp(_.toggleAllChecked),
+      Checkbox(model.subProp(_.toggleAllChecked))(
         cls := "toggle-all",
         onclick :+= ((ev: Event) => {
           presenter.setItemsCompleted()
@@ -86,7 +88,7 @@ class TodoView(model: ModelProperty[TodoViewModel], presenter: TodoPresenter) ex
   private def listItemTemplate(item: ModelProperty[Todo]) = {
     val editName = Property("")
 
-    val editorInput = TextInput(editName, debounce = None)(
+    val editorInput = TextInput(editName, debounce = 0 millis)(
       cls := "edit",
       onkeydown :+= ((ev: KeyboardEvent) => {
         if (ev.keyCode == KeyCode.Enter) {
@@ -104,7 +106,7 @@ class TodoView(model: ModelProperty[TodoViewModel], presenter: TodoPresenter) ex
     ).render
 
     val stdView = div(cls := "view")(
-      Checkbox(item.subProp(_.completed), cls := "toggle"),
+      Checkbox(item.subProp(_.completed))(cls := "toggle"),
       label(
         ondblclick :+= ((ev: Event) => {
           presenter.startItemEdit(item, editName)
