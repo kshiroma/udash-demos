@@ -1,7 +1,6 @@
 package io.udash.demos.rest
 
-import io.udash.Application
-import io.udash.routing.WindowUrlPathChangeProvider
+import io.udash._
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
