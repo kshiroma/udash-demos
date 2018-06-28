@@ -10,4 +10,4 @@ class ImageFactory(prefix: String) {
     img(src := s"$prefix/$name", alt := altText, xs)
 }
 
-object Image extends ImageFactory("assets/images")
+object Image extends ImageFactory("/assets/images")

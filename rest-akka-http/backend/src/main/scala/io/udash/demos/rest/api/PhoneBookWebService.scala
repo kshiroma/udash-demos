@@ -5,13 +5,13 @@ import akka.http.scaladsl.model.{HttpEntity, MediaTypes, StatusCodes}
 import com.avsystem.commons.serialization.GenCodec
 import io.udash.demos.rest.model._
 import io.udash.demos.rest.services.{ContactService, InMemoryContactService, InMemoryPhoneBookService, PhoneBookService}
-import io.udash.rpc.DefaultUdashSerialization
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.server.RequestContext
+import akka.http.scaladsl.server.{RequestContext, Route}
 import akka.http.scaladsl.unmarshalling.{FromEntityUnmarshaller, Unmarshaller}
+import com.avsystem.commons.serialization.json.{JsonStringInput, JsonStringOutput}
 
 
-trait PhoneBookWebServiceSpec extends DefaultUdashSerialization {
+trait PhoneBookWebServiceSpec {
   private val staticsDir = "frontend/target/UdashStatics/WebContent"
 
   val phoneBookService: PhoneBookService
@@ -22,17 +22,12 @@ trait PhoneBookWebServiceSpec extends DefaultUdashSerialization {
 
   implicit def gencodecMarshaller[T](implicit codec: GenCodec[T]): ToEntityMarshaller[T] =
     Marshaller.withFixedContentType(MediaTypes.`application/json`) { value =>
-      var string: String = null
-      val output = outputSerialization((serialized) => string = serialized)
-      codec.write(output, value)
-      HttpEntity(MediaTypes.`application/json`, string)
+      HttpEntity(MediaTypes.`application/json`, JsonStringOutput.write(value))
     }
 
   implicit def gencodecUnmarshaller[T](implicit codec: GenCodec[T]): FromEntityUnmarshaller[T] =
     Unmarshaller.stringUnmarshaller.forContentTypes(MediaTypes.`application/json`).map{ data =>
-      val input = inputSerialization(data)
-      val out: T = codec.read(input)
-      out
+      JsonStringInput.read[T](data)
     }
 
   private def completeIfNonEmpty[T](ctx: RequestContext)(opt: Option[T])(implicit rm: ToResponseMarshaller[T]) =
@@ -41,10 +36,7 @@ trait PhoneBookWebServiceSpec extends DefaultUdashSerialization {
       case None => complete(StatusCodes.NotFound)(ctx)
     }
 
-  val route = {
-    path("") {
-      getFromFile(s"$staticsDir/index.html")
-    } ~
+  val route: Route = {
     pathPrefix("scripts"){
       getFromDirectory(s"$staticsDir/scripts")
     } ~
@@ -139,6 +131,8 @@ trait PhoneBookWebServiceSpec extends DefaultUdashSerialization {
             }
           }
       }
+    } ~ get {
+      getFromFile(s"$staticsDir/index.html")
     }
   }
 }
