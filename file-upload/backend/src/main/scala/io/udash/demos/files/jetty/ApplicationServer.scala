@@ -1,6 +1,5 @@
 package io.udash.demos.files.jetty
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import javax.servlet.MultipartConfigElement
 
 import io.udash.demos.files.ApplicationServerContexts

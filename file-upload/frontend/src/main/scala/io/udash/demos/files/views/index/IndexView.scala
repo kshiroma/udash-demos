@@ -61,7 +61,7 @@ class IndexView(model: ModelProperty[UploadViewModel], presenter: IndexPresenter
         UdashPanel.heading(
           "Upload state ",
           produce(model.subProp(_.state.state), checkNull = false) {
-            case null => UdashLabel.info(UdashBootstrap.newId(), "Waiting").render
+            case FileUploadState.NotStarted => UdashLabel.info(UdashBootstrap.newId(), "Waiting").render
             case FileUploadState.InProgress => UdashLabel.info(UdashBootstrap.newId(), "In progress").render
             case FileUploadState.Completed => UdashLabel.success(UdashBootstrap.newId(), "Completed").render
             case FileUploadState.Cancelled => UdashLabel.warning(UdashBootstrap.newId(), "Cancelled").render

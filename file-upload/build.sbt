@@ -1,8 +1,10 @@
+import sbtcrossproject.{crossProject, CrossType}
+
 name := "file-upload"
 
 inThisBuild(Seq(
-  version := "0.6.0-SNAPSHOT",
-  scalaVersion := "2.12.4",
+  version := "0.7.0-SNAPSHOT",
+  scalaVersion := "2.12.6",
   organization := "io.udash",
   scalacOptions ++= Seq(
     "-feature",
@@ -34,7 +36,7 @@ lazy val `rest-akka-http` = project.in(file("."))
     Compile / mainClass := Some("io.udash.demos.files.Launcher"),
   )
 
-lazy val shared = crossProject
+lazy val shared = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure).in(file("shared"))
   .settings(
     libraryDependencies ++= Dependencies.crossDeps.value,
