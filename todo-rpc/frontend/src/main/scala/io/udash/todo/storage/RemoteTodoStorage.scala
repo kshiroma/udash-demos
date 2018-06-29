@@ -20,6 +20,6 @@ class RemoteTodoStorage extends TodoStorage {
     listeners.fire(todoList)
 
   override def listen(l: Seq[Todo] => Any): Registration = {
-    listeners.register(PartialFunction(l))
+    listeners.register { case x => l(x) }
   }
 }

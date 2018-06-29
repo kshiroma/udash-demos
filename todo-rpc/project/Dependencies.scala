@@ -1,12 +1,13 @@
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbt._
 
 object Dependencies {
-  val udashVersion = "0.6.0"
-  val udashJQueryVersion = "1.1.0"
+  val udashVersion = "0.7.0"
+  val udashJQueryVersion = "1.2.0"
 
   val logbackVersion = "1.1.3"
-  val jettyVersion = "9.4.8.v20171121"
+  val jettyVersion = "9.4.11.v20180605"
 
   val crossDeps = Def.setting(Seq[ModuleID](
     "io.udash" %% "udash-core-shared" % udashVersion,

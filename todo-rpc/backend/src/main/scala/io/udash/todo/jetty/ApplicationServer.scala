@@ -32,7 +32,6 @@ class ApplicationServer(val port: Int, resourceBase: String) {
   private def createAtmosphereHolder() = {
     import io.udash.rpc._
     import io.udash.todo.rpc._
-    import scala.concurrent.ExecutionContext.Implicits.global
 
     val config = new DefaultAtmosphereServiceConfig(_ =>
       new DefaultExposesServerRPC[MainServerRPC](new ExposedRpcInterfaces(InMemoryTodoStorage))

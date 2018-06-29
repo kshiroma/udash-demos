@@ -1,6 +1,6 @@
 package io.udash.demos.rest
 
-import io.udash.Application
+import io.udash._
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -10,7 +10,7 @@ object ApplicationContext {
   private val routingRegistry = new RoutingRegistryDef
   private val viewPresenterRegistry = new StatesToViewFactoryDef
 
-  val applicationInstance = new Application[RoutingState](routingRegistry, viewPresenterRegistry)
+  val applicationInstance = new Application[RoutingState](routingRegistry, viewPresenterRegistry, WindowUrlPathChangeProvider)
 
   import io.udash.rest._
   val restServer: MainServerREST = DefaultServerREST[MainServerREST](

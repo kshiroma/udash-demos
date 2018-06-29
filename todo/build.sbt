@@ -1,8 +1,8 @@
 name := "todomvc"
 
 inThisBuild(Seq(
-  version := "0.6.0-SNAPSHOT",
-  scalaVersion := "2.12.4",
+  version := "0.7.0-SNAPSHOT",
+  scalaVersion := "2.12.6",
   organization := "io.udash",
   scalacOptions ++= Seq(
     "-feature",

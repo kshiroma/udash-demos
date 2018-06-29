@@ -1,11 +1,10 @@
 package io.udash.todo.rpc
 
-import com.avsystem.commons.rpc.RPC
+import io.udash.rpc.DefaultClientUdashRPCFramework
 import io.udash.todo.rpc.model.Todo
 
-@RPC
 trait MainClientRPC {
   def storeUpdated(todos: Seq[Todo]): Unit
 }
 
-       
+object MainClientRPC extends DefaultClientUdashRPCFramework.RPCCompanion[MainClientRPC]

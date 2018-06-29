@@ -5,7 +5,7 @@ import io.udash.rpc._
 
 import scala.concurrent.Future
 
-@RPC
 trait MainServerRPC {
   def loadUploadedFiles(): Future[Seq[UploadedFile]]
 }
+object MainServerRPC extends DefaultServerUdashRPCFramework.RPCCompanion[MainServerRPC]
