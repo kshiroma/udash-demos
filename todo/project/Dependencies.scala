@@ -3,7 +3,7 @@ import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbt._
 
 object Dependencies {
-  val udashCoreVersion = "0.7.0"
+  val udashCoreVersion = "0.7.1"
   val udashJQueryVersion = "1.2.0"
 
   val frontendDeps = Def.setting(Seq[ModuleID](

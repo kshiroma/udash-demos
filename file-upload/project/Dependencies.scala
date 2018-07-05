@@ -3,7 +3,7 @@ import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbt._
 
 object Dependencies {
-  val udashVersion = "0.7.0"
+  val udashVersion = "0.7.1"
 
   val logbackVersion = "1.1.3"
   val jettyVersion = "9.4.11.v20180605"
