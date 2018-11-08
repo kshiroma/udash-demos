@@ -17,18 +17,11 @@ object JSLauncher extends CrossLogging {
         case Some(root) =>
           ApplicationContext.applicationInstance.run(root)
       }
-
-
       jQ(".dekitayo").get(0) match {
-
         case None => logger.error("do not find ")
         case Some(root) =>
-
+          ApplicationContext.dekitayoApplicatonInstance.run(root)
       }
-
-
     })
-
-
   }
 }
