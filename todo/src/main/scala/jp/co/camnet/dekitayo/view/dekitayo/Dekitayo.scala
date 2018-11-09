@@ -2,7 +2,17 @@ package jp.co.camnet.dekitayo.view.dekitayo
 
 import io.udash.properties.HasModelPropertyCreator
 
-case class DekitayoViewModel(dekitayos: Seq[Dekitayo], dekitayoFilter: DekitayoFilter, newDekitayoName: String, toggleAllChecked: Boolean)
+case class DekitayoViewModel(
+                              dekitayos: Seq[Dekitayo],
+                              dekitayoFilter: DekitayoFilter,
+                              newDekitayoName: String,
+                              toggleAllChecked: Boolean,
+
+                              newSiteName: String,
+                              newAppliName: String,
+                              newBranchName: String,
+                              newTargetUSerName: String
+                            )
 
 object DekitayoViewModel extends HasModelPropertyCreator[DekitayoViewModel]
 

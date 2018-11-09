@@ -12,7 +12,7 @@ class DekitayoRootView extends ContainerView {
 
   override val getTemplate: Modifier = {
     div(
-      h1("dekitayo"),
+      h1("dekita-yo"),
       childViewContainer
     )
   }

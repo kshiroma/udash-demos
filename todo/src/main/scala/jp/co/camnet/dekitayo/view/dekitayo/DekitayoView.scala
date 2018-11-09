@@ -38,6 +38,11 @@ class DekitayoView(model: ModelProperty[DekitayoViewModel], presenter: DekitayoP
             false
           }
         })
+      ),
+
+      Select(model.subProp(_.newSiteName))(
+        cls:="newTodo",
+        placeholder:= ""
       )
     )
   }
@@ -47,7 +52,7 @@ class DekitayoView(model: ModelProperty[DekitayoViewModel], presenter: DekitayoP
     section(cls := "main")(
       Checkbox(model.subProp(_.toggleAllChecked))(
         cls := "toggle-all",
-        onclick :+= ((ev: Event) => {
+        onclick :+= ((_: Event) => {
           presenter.setItemsCompleted()
           false
         })
@@ -77,7 +82,7 @@ class DekitayoView(model: ModelProperty[DekitayoViewModel], presenter: DekitayoP
       showIf(isCompleteDekitayoListNonEmpty)(Seq(
         button(
           cls := "clear-completed",
-          onclick :+= ((en: Event) => presenter.clearCompleted(), true)
+          onclick :+= ((_: Event) => presenter.clearCompleted(), true)
         )("Clear complete").render
       ))
     )

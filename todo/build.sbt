@@ -33,3 +33,20 @@ val todomvc = project.in(file("."))
     Compile / packageJSDependencies / artifactPath := generatedDir / "todomvc-deps.js",
     Compile / packageMinifiedJSDependencies / artifactPath := generatedDir / "todomvc-deps.js",
   )
+
+
+
+val dekitayo = project.in(file("."))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    mainClass := Some("io.udash.todo.JSLauncher"),
+    scalaJSUseMainModuleInitializer := true,
+
+    libraryDependencies ++= Dependencies.frontendDeps.value,
+
+    // Target files for Scala.js plugin
+    Compile / fastOptJS / artifactPath := generatedDir / "dekitayo.js",
+    Compile / fullOptJS / artifactPath := generatedDir / "dekitayo.js",
+    Compile / packageJSDependencies / artifactPath := generatedDir / "dekitayo-deps.js",
+    Compile / packageMinifiedJSDependencies / artifactPath := generatedDir / "dekitayo-deps.js",
+  )
